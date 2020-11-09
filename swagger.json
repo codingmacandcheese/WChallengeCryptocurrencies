@@ -1,0 +1,267 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is WChallengeCryptocurrencies server by @macandcheese.  You can find out more about me at [https://www.linkedin.com/in/macarena-pomerantz/](https://www.linkedin.com/in/macarena-pomerantz/)",
+    "version": "1.0.0",
+    "title": "WChallengeCryptocurrencies"
+  },
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Signup & Login endpoints"
+    },
+    {
+      "name": "User",
+      "description": "Operations about user"
+    },
+    {
+      "name": "Cryptocurrency",
+      "description": "Operations about cryptocurrency"
+    }
+  ],
+  "paths": {
+    "/signup": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Adds a new user to the database",
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "signup",
+            "description": "User auth signup details",
+            "schema": {
+              "type": "object",
+              "required": [
+                "nombre",
+                "apellido",
+                "username",
+                "password",
+                "coin"
+              ],
+              "properties": {
+                "nombre": {
+                  "type":"string"
+                },
+                "apellido": {
+                  "type":"string"
+                },
+                "username": {
+                  "type":"string"
+                },
+                "password": {
+                  "type":"string"
+                },
+                "coin": {
+                  "type":"string",
+                  "enum": [
+                    "EUR",
+                    "USD",
+                    "ARS"
+                  ]
+                }
+              },
+              "example":{
+                "nombre": "Macarena",
+                "apellido": "Pomerantz",
+                "username": "mpomerantz",
+                "password": "wolox123",
+                "coin": "USD"
+              }
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK. Created user in database"
+          },
+          "400": {
+            "description": "Bad Request. Invalid input"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Grants access to a specific user",
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "login",
+            "description": "User auth login details",
+            "schema": {
+              "type": "object",
+              "required": [
+                "username",
+                "password"
+              ],
+              "properties": {
+                "username": {
+                  "type":"string"
+                },
+                "password": {
+                  "type":"string"
+                }
+              },
+              "example":{
+                "username": "psanchez",
+                "password": "hola12345"
+              }
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK. Logged in user."
+          },
+          "400": {
+            "description": "Bad Request. Invalid input"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/user/addCryptocurrency": {
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Adds a cryptocurrency to logged in user",
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "cryptocurrency",
+            "description": "Cryptocurrency name to be added to logged in user",
+            "schema": {
+              "type": "string",
+              "required": true,
+              "example": "bitcoin"
+            },
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "token",
+            "description": "Token of logged in user",
+            "schema": {
+              "required": true
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK. Added cryptocurrency to user."
+          },
+          "400": {
+            "description": "Bad Request. Invalid input"
+          }
+        }
+      }
+    },
+    "/user/topCryptocurrencies": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Retrieves Top N Cryptocurrencies of logged in user",
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "n",
+            "description": "Number of cryptocurrencies in ranking. Must be under or equal to 25.",
+            "schema": {
+              "type": "string",
+              "required": true,
+              "example": "5"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "order",
+            "description": "Order of cryptocurrencies in ranking. Possible values: 'ASCENDENTE', 'DESCENDENTE'",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "token",
+            "description": "Token of logged in user",
+            "schema": {
+              "required": true
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK. Top N Cryptocurrencies."
+          },
+          "400": {
+            "description": "Bad Request. Invalid input"
+          }
+        }
+      }
+    },
+    "/cryptocurrency/get": {
+      "get": {
+        "tags": [
+          "Cryptocurrency"
+        ],
+        "summary": "Retrieves all cryptocurrencies available",
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "token",
+            "description": "Token of logged in user",
+            "schema": {
+              "required": true
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK. All Cryptocurrencies."
+          },
+          "400": {
+            "description": "Bad Request. Invalid input"
+          }
+        }
+      }
+    }
+  }
+}
